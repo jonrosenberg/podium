@@ -31,44 +31,74 @@
 
 
 <script>
-  // 2. Asynchronously load the Upload Widget and Player API code.
-  var tag = document.createElement('script');
-  tag.src = "https://www.youtube.com/iframe_api";
-  var firstScriptTag = document.getElementsByTagName('script')[0];
-  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  function myfunction() {
+    setCookie("username", $("#title").val(), 365);
+    location.reload();
+}
 
-  // 3. Define global variables for the widget and the player.
-  //    The function loads the widget after the JavaScript code
-  //    has downloaded and defines event handlers for callback
-  //    notifications related to the widget.
-  var widget;
-  var player;
+// 2. Asynchronously load the Upload Widget and Player API code.
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  function onYouTubeIframeAPIReady() {
+// 3. Define global variables for the widget and the player.
+//    The function loads the widget after the JavaScript code
+//    has downloaded and defines event handlers for callback
+//    notifications related to the widget.
+var widget;
+var player;
+
+function onYouTubeIframeAPIReady() {
     widget = new YT.UploadWidget('widget', {
-      width: 500,
-      events: {
-        'onUploadSuccess': onUploadSuccess,
-        'onProcessingComplete': onProcessingComplete
-      }
+        width: 500,
+        events: {
+            'onUploadSuccess': onUploadSuccess,
+                'onProcessingComplete': onProcessingComplete,
+                'onApiReady': onApiReady
+        }
     });
-  }
+}
 
-  // 4. This function is called when a video has been successfully uploaded.
-  function onUploadSuccess(event) {
+// 4. This function is called when a video has been successfully uploaded.
+function onUploadSuccess(event) {
     alert('Video ID ' + event.data.videoId + ' was uploaded and is currently being processed.');
-  }
+}
 
-  // 5. This function is called when a video has been successfully
-  //    processed.
-  function onProcessingComplete(event) {
+// 5. This function is called when a video has been successfully
+//    processed.
+function onProcessingComplete(event) {
     player = new YT.Player('player', {
-      height: 390,
-      width: 640,
-      videoId: event.data.videoId,
-      events: {}
+        height: 390,
+        width: 640,
+        videoId: event.data.videoId,
+        events: {}
     });
-  }
+}
+
+function onApiReady(event) {
+    console.log("onApiReady is fired");
+    widget.setVideoTitle(getCookie("username"));
+}
+
+function setCookie(c_name, value, exdays) {
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+    document.cookie = c_name + "=" + c_value;
+}
+
+function getCookie(c_name) {
+    var i, x, y, ARRcookies = document.cookie.split(";");
+    for (i = 0; i < ARRcookies.length; i++) {
+        x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+        y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+        x = x.replace(/^\s+|\s+$/g, "");
+        if (x == c_name) {
+            return unescape(y);
+        }
+    }
+}
 
   
 </script>
