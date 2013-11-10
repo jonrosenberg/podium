@@ -37,7 +37,9 @@
 <script>
   function setWidget() {
     Cookies.set('username', $("#title").val());
-    Cookies.set('privacy', "unlisted");
+    Cookies.set('description', '');
+    Cookies.set('keywords', '');
+    Cookies.set('privacy', 'unlisted');
     location.reload();
 }
 
@@ -84,8 +86,8 @@ function onProcessingComplete(event) {
 function onApiReady(event) {
     console.log("onApiReady is fired");
     widget.setVideoTitle(Cookies.get("username"));
-    widget.setVideoDescription(Cookie.get("description"));
-    widget.setVideoKeywords(Cookie.get("keywords"));
+    widget.setVideoDescription(Cookies.get("description"));
+    widget.setVideoKeywords(Cookies.get("keywords"));
     widget.setVideoPrivacy(Cookies.get("privacy"));
 }
 
