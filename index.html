@@ -21,11 +21,21 @@
 
     <h1>You're ready to Present!</h1>
 
-    Title:
-    <input id="title" type="text" value="">
-    <button onclick="setWidget()">Submit</button>
-    <br>Click submit to set the title. Then start recording your video.
     
+    <form role="form">
+      <div class="form-group">
+        <input id="title" class="form-control" type="text" value="" placeholder="Title">
+      </div>
+      <div class="form-group">
+        <textarea id="description" class="form-control" rows="3" placeholder="Description"></textarea>
+      </div>
+      <div class="form-group">
+        <input id="keywords" class="form-control" type="text" value="" placeholder="Keywords seperated by commas: practic interview, school, keyword3, etc..">
+      </div>
+      
+      <button type="submit" class="btn btn-default"  onclick="myFunction()">Submit</button>
+      <br>Click submit to set the title. Then start recording your video.
+    </form>
   <!-- 1. The 'widget' div element will contain the upload widget.
      The 'player' div element will contain the player IFrame. -->
   <!-- <iframe id="widget" type="text/html" width="640" height="390"
@@ -35,11 +45,18 @@
 </div>
 
 <script>
-  function setWidget() {
-    Cookies.set('username', $("#title").val());
-    Cookies.set('description', '');
-    Cookies.set('keywords', '');
+  function myFunction() {
+    Cookies.set('title', $("#title").val());
+    Cookies.set('description', $("#description").val());
+    keywords = $("#keywords").val().split(',');
+    for (var i = 0; i < keywords.length; i++) {
+      ;
+      Cookies.set('keyword-'+i, trim(keywords[i]));
+    };
+    
+    Cookies.set('keyword-1', 'cat');
     Cookies.set('privacy', 'unlisted');
+    //alert('hi');
     location.reload();
 }
 
@@ -85,7 +102,7 @@ function onProcessingComplete(event) {
 
 function onApiReady(event) {
     console.log("onApiReady is fired");
-    widget.setVideoTitle(Cookies.get("username"));
+    widget.setVideoTitle(Cookies.get("title"));
     widget.setVideoDescription(Cookies.get("description"));
     widget.setVideoKeywords(Cookies.get("keywords"));
     widget.setVideoPrivacy(Cookies.get("privacy"));
