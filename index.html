@@ -32,8 +32,28 @@
       <div class="form-group">
         <input id="keywords" class="form-control" type="text" value="" placeholder="Keywords seperated by commas: practic interview, school, keyword3, etc..">
       </div>
-      
+      <div class="form-group">
+        <div class="radio-inline">
+          <label>
+            <input type="radio" name="privacy" id="optionsRadios1" value="private">
+            Private
+          </label>
+        </div>
+        <div class="radio-inline">
+          <label>
+            <input type="radio" name="privacy" id="optionsRadios2" value="unlisted" checked>
+            Unlisted
+          </label>
+        </div>
+        <div class="radio-inline">
+          <label>
+            <input type="radio" name="privacy" id="optionsRadios3" value="public">
+            public
+          </label>
+        </div>
+      </div>  
       <button type="submit" class="btn btn-default"  onclick="myFunction()">Submit</button>
+    
       <br>Click submit to set the title. Then start recording your video.
     </form>
   <!-- 1. The 'widget' div element will contain the upload widget.
@@ -45,19 +65,18 @@
 </div>
 
 <script>
-  function myFunction() {
-    Cookies.set('title', $("#title").val());
-    Cookies.set('description', $("#description").val());
-    keywords = $("#keywords").val().split(',');
-    for (var i = 0; i < keywords.length; i++) {
-      ;
-      Cookies.set('keyword-'+i, trim(keywords[i]));
-    };
-    
-    Cookies.set('keyword-1', 'cat');
-    Cookies.set('privacy', 'unlisted');
-    //alert('hi');
-    location.reload();
+function myFunction() {
+  Cookies.set('title', $("#title").val());
+  Cookies.set('description', $("#description").val());
+  keywords = $("#keywords").val().split(',');
+  for (var i = 0; i < keywords.length; i++) {
+    if(keywords[i].trim().length != 0){
+      Cookies.set('keyword-'+i, keywords[i].trim());
+    }
+  };
+  Cookies.set('privacy', $("input[name='privacy']:checked").val());
+  //alert('hi');
+  location.reload();
 }
 
 // 2. Asynchronously load the Upload Widget and Player API code.
