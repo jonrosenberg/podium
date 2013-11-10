@@ -3,4 +3,4 @@ podium
 
 Hackathon Idea
 
-## (demo)[http://jonrosenberg.github.io/podium/]
+## [Demo](http://jonrosenberg.github.io/podium/) http://jonrosenberg.github.io/podium/
