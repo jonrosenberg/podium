@@ -5,8 +5,11 @@
   <title>My Parse App</title>
   <meta name="description" content="My Parse App">
   <meta name="viewport" content="width=device-width">
+  <!-- styles -->
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  <!-- scripts -->
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
   <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
 
@@ -14,12 +17,13 @@
 
 <body>
   
-  <div id="main">
-    <h1>You're ready to use Parse!</h1>
+  <div class="container">
+
+    <h1>You're ready to Present!</h1>
 
     Title:
     <input id="title" type="text" value="">
-    <button onclick="myfunction()">Submit</button>
+    <button onclick="setWidget()">Submit</button>
     <br>Click submit to set the title. Then start recording your video.
     
   <!-- 1. The 'widget' div element will contain the upload widget.
@@ -28,11 +32,12 @@
   src="https://www.youtube.com/upload_embed" frameborder="0"></iframe> -->
   <div id="widget"></div>
   <div id="player"></div>
-
+</div>
 
 <script>
-  function myfunction() {
-    setCookie("username", $("#title").val(), 365);
+  function setWidget() {
+    Cookies.set('username', $("#title").val());
+    Cookies.set('privacy', "unlisted");
     location.reload();
 }
 
@@ -53,7 +58,7 @@ function onYouTubeIframeAPIReady() {
     widget = new YT.UploadWidget('widget', {
         width: 500,
         events: {
-            'onUploadSuccess': onUploadSuccess,
+                'onUploadSuccess': onUploadSuccess,
                 'onProcessingComplete': onProcessingComplete,
                 'onApiReady': onApiReady
         }
@@ -78,26 +83,10 @@ function onProcessingComplete(event) {
 
 function onApiReady(event) {
     console.log("onApiReady is fired");
-    widget.setVideoTitle(getCookie("username"));
-}
-
-function setCookie(c_name, value, exdays) {
-    var exdate = new Date();
-    exdate.setDate(exdate.getDate() + exdays);
-    var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
-    document.cookie = c_name + "=" + c_value;
-}
-
-function getCookie(c_name) {
-    var i, x, y, ARRcookies = document.cookie.split(";");
-    for (i = 0; i < ARRcookies.length; i++) {
-        x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
-        y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
-        x = x.replace(/^\s+|\s+$/g, "");
-        if (x == c_name) {
-            return unescape(y);
-        }
-    }
+    widget.setVideoTitle(Cookies.get("username"));
+    widget.setVideoDescription(Cookie.get("description"));
+    widget.setVideoKeywords(Cookie.get("keywords"));
+    widget.setVideoPrivacy(Cookies.get("privacy"));
 }
 
   
